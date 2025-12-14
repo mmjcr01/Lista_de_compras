@@ -1,0 +1,175 @@
+{
+  "info": {
+    "name": "Preço Justo API - Coleção Completa",
+    "_postman_id": "b2b22222-aaaa-bbbb-cccc-ddddeeeeffff",
+    "description": "Coleção de testes para Estabelecimentos, Listas, Itens, Favoritos e Histórico.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/api" },
+    { "key": "usuario_id", "value": "" },
+    { "key": "estabelecimento_id", "value": "" },
+    { "key": "lista_compras_id", "value": "" },
+    { "key": "item_lista_id", "value": "" },
+    { "key": "produto_id", "value": "" },
+    { "key": "favoritos_id", "value": "" },
+    { "key": "historico_buscas_id", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Estabelecimentos",
+      "item": [
+        {
+          "name": "Listar estabelecimentos",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/estabelecimentos?limit=10&page=1&cidade=Salvador", "host": ["{{baseUrl}}"], "path": ["estabelecimentos"], "query": [ { "key": "limit", "value": "10" }, { "key": "page", "value": "1" }, { "key": "cidade", "value": "Salvador" } ] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 200', () => pm.response.code === 200);" ] } } ]
+        },
+        {
+          "name": "Criar estabelecimento",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"estabelecimento_id\": \"{{$randomUUID}}\",\n  \"nome\": \"Mercado Central\",\n  \"tipo_logradouro\": \"Rua\",\n  \"logradouro\": \"Principal\",\n  \"numero\": \"100\",\n  \"bairro\": \"Centro\",\n  \"cidade\": \"Salvador\",\n  \"estado\": \"BA\"\n}" },
+            "url": { "raw": "{{baseUrl}}/estabelecimentos", "host": ["{{baseUrl}}"], "path": ["estabelecimentos"] }
+          },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 201', () => pm.response.code === 201);", "const b = pm.response.json();", "pm.collectionVariables.set('estabelecimento_id', b.estabelecimento_id);" ] } } ]
+        },
+        {
+          "name": "Obter estabelecimento",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/estabelecimentos/{{estabelecimento_id}}", "host": ["{{baseUrl}}"], "path": ["estabelecimentos", "{{estabelecimento_id}}"] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 200', () => pm.response.code === 200);" ] } } ]
+        },
+        {
+          "name": "Atualizar estabelecimento",
+          "request": { "method": "PUT", "header": [ { "key": "Content-Type", "value": "application/json" } ], "body": { "mode": "raw", "raw": "{ \"nome\": \"Mercado Central Atualizado\" }" }, "url": { "raw": "{{baseUrl}}/estabelecimentos/{{estabelecimento_id}}", "host": ["{{baseUrl}}"], "path": ["estabelecimentos", "{{estabelecimento_id}}"] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 200', () => pm.response.code === 200);" ] } } ]
+        },
+        {
+          "name": "Excluir estabelecimento",
+          "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/estabelecimentos/{{estabelecimento_id}}", "host": ["{{baseUrl}}"], "path": ["estabelecimentos", "{{estabelecimento_id}}"] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 204', () => pm.response.code === 204);" ] } } ]
+        }
+      ]
+    },
+    {
+      "name": "Listas de Compras",
+      "item": [
+        {
+          "name": "Listar listas",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/listas_compras?limit=10&page=1&usuario_id={{usuario_id}}", "host": ["{{baseUrl}}"], "path": ["listas_compras"], "query": [ { "key": "limit", "value": "10" }, { "key": "page", "value": "1" }, { "key": "usuario_id", "value": "{{usuario_id}}" } ] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 200', () => pm.response.code === 200);" ] } } ]
+        },
+        {
+          "name": "Criar lista",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"lista_compras_id\": \"{{$randomUUID}}\",\n  \"usuario_id\": \"{{usuario_id}}\",\n  \"nome\": \"Compras da Semana\",\n  \"orcamento_total\": 200.00\n}" },
+            "url": { "raw": "{{baseUrl}}/listas_compras", "host": ["{{baseUrl}}"], "path": ["listas_compras"] }
+          },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 201', () => pm.response.code === 201);", "const b = pm.response.json();", "pm.collectionVariables.set('lista_compras_id', b.lista_compras_id);" ] } } ]
+        },
+        {
+          "name": "Obter lista",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/listas_compras/{{lista_compras_id}}", "host": ["{{baseUrl}}"], "path": ["listas_compras", "{{lista_compras_id}}"] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 200', () => pm.response.code === 200);" ] } } ]
+        },
+        {
+          "name": "Atualizar lista",
+          "request": { "method": "PUT", "header": [ { "key": "Content-Type", "value": "application/json" } ], "body": { "mode": "raw", "raw": "{ \"nome\": \"Compras da Semana Atualizada\", \"ativa\": true }" }, "url": { "raw": "{{baseUrl}}/listas_compras/{{lista_compras_id}}", "host": ["{{baseUrl}}"], "path": ["listas_compras", "{{lista_compras_id}}"] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 200', () => pm.response.code === 200);" ] } } ]
+        },
+        {
+          "name": "Excluir lista",
+          "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/listas_compras/{{lista_compras_id}}", "host": ["{{baseUrl}}"], "path": ["listas_compras", "{{lista_compras_id}}"] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 204', () => pm.response.code === 204);" ] } } ]
+        }
+      ]
+    },
+    {
+      "name": "Itens da Lista",
+      "item": [
+        {
+          "name": "Listar itens",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/itens_lista?limit=10&page=1&lista_compras_id={{lista_compras_id}}", "host": ["{{baseUrl}}"], "path": ["itens_lista"], "query": [ { "key": "limit", "value": "10" }, { "key": "page", "value": "1" }, { "key": "lista_compras_id", "value": "{{lista_compras_id}}" } ] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 200', () => pm.response.code === 200);" ] } } ]
+        },
+        {
+          "name": "Criar item",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"item_lista_id\": \"{{$randomUUID}}\",\n  \"lista_compras_id\": \"{{lista_compras_id}}\",\n  \"produto_id\": \"{{produto_id}}\",\n  \"quantidade\": 2,\n  \"unidade\": \"un\",\n  \"preco_estimado\": 10.5,\n  \"comprado\": false,\n  \"ordem\": 1\n}" },
+            "url": { "raw": "{{baseUrl}}/itens_lista", "host": ["{{baseUrl}}"], "path": ["itens_lista"] }
+          },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 201', () => pm.response.code === 201);", "const b = pm.response.json();", "pm.collectionVariables.set('item_lista_id', b.item_lista_id);" ] } } ]
+        },
+        {
+          "name": "Obter item",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/itens_lista/{{item_lista_id}}", "host": ["{{baseUrl}}"], "path": ["itens_lista", "{{item_lista_id}}"] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 200', () => pm.response.code === 200);" ] } } ]
+        },
+        {
+          "name": "Atualizar item",
+          "request": { "method": "PUT", "header": [ { "key": "Content-Type", "value": "application/json" } ], "body": { "mode": "raw", "raw": "{ \"comprado\": true, \"ordem\": 2 }" }, "url": { "raw": "{{baseUrl}}/itens_lista/{{item_lista_id}}", "host": ["{{baseUrl}}"], "path": ["itens_lista", "{{item_lista_id}}"] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 200', () => pm.response.code === 200);" ] } } ]
+        },
+        {
+          "name": "Excluir item",
+          "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/itens_lista/{{item_lista_id}}", "host": ["{{baseUrl}}"], "path": ["itens_lista", "{{item_lista_id}}"] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 204', () => pm.response.code === 204);" ] } } ]
+        }
+      ]
+    },
+    {
+      "name": "Favoritos",
+      "item": [
+        {
+          "name": "Listar favoritos",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/favoritos?limit=10&page=1&usuario_id={{usuario_id}}", "host": ["{{baseUrl}}"], "path": ["favoritos"], "query": [ { "key": "limit", "value": "10" }, { "key": "page", "value": "1" }, { "key": "usuario_id", "value": "{{usuario_id}}" } ] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 200', () => pm.response.code === 200);" ] } } ]
+        },
+        {
+          "name": "Criar favorito (produto)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"favoritos_id\": \"{{$randomUUID}}\",\n  \"usuario_id\": \"{{usuario_id}}\",\n  \"tipo\": \"produto\",\n  \"produto_id\": \"{{produto_id}}\"\n}" },
+            "url": { "raw": "{{baseUrl}}/favoritos", "host": ["{{baseUrl}}"], "path": ["favoritos"] }
+          },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 201 ou 409', () => [201,409].includes(pm.response.code));", "if (pm.response.code === 201) { pm.collectionVariables.set('favoritos_id', pm.response.json().favoritos_id); }" ] } } ]
+        },
+        {
+          "name": "Excluir favorito",
+          "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/favoritos/{{favoritos_id}}", "host": ["{{baseUrl}}"], "path": ["favoritos", "{{favoritos_id}}"] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 204', () => pm.response.code === 204);" ] } } ]
+        }
+      ]
+    },
+    {
+      "name": "Histórico de Buscas",
+      "item": [
+        {
+          "name": "Listar histórico",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/historico_buscas?limit=10&page=1&usuario_id={{usuario_id}}", "host": ["{{baseUrl}}"], "path": ["historico_buscas"], "query": [ { "key": "limit", "value": "10" }, { "key": "page", "value": "1" }, { "key": "usuario_id", "value": "{{usuario_id}}" } ] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 200', () => pm.response.code === 200);" ] } } ]
+        },
+        {
+          "name": "Criar histórico",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"historico_buscas_id\": \"{{$randomUUID}}\",\n  \"usuario_id\": \"{{usuario_id}}\",\n  \"termo_busca\": \"arroz\",\n  \"tipo_busca\": \"produto\"\n}" },
+            "url": { "raw": "{{baseUrl}}/historico_buscas", "host": ["{{baseUrl}}"], "path": ["historico_buscas"] }
+          },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 201', () => pm.response.code === 201);", "pm.collectionVariables.set('historico_buscas_id', pm.response.json().historico_buscas_id);" ] } } ]
+        },
+        {
+          "name": "Excluir histórico",
+          "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/historico_buscas/{{historico_buscas_id}}", "host": ["{{baseUrl}}"], "path": ["historico_buscas", "{{historico_buscas_id}}"] } },
+          "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Status 204', () => pm.response.code === 204);" ] } } ]
+        }
+      ]
+    }
+  ]
+}

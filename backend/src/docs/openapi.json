@@ -1,0 +1,1008 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Preço Justo API",
+    "version": "1.0.0",
+    "description": "API do backend do Preço Justo (CRUD e operações principais)."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Desenvolvimento local"
+    }
+  ],
+  "tags": [
+    { "name": "Categorias" },
+    { "name": "Produtos" },
+    { "name": "Preços" },
+    { "name": "Estabelecimentos" },
+    { "name": "Listas de Compras" },
+    { "name": "Itens da Lista" },
+    { "name": "Favoritos" },
+    { "name": "Histórico de Buscas" },
+    { "name": "Usuários" },
+    { "name": "Autenticação" }
+  ],
+  "paths": {
+    "/categorias": {
+      "get": {
+        "tags": ["Categorias"],
+        "summary": "Listar categorias",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": { "type": "integer", "default": 20 }
+          }
+        ],
+        "responses": { "200": { "description": "Lista paginada" } }
+      },
+      "post": {
+        "tags": ["Categorias"],
+        "summary": "Criar categoria",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Categoria" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Criado" },
+          "400": { "description": "Campos obrigatórios ausentes" }
+        }
+      }
+    },
+    "/categorias/{id}": {
+      "get": {
+        "tags": ["Categorias"],
+        "summary": "Obter categoria",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Não encontrado" }
+        }
+      },
+      "put": {
+        "tags": ["Categorias"],
+        "summary": "Atualizar categoria",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Categoria" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Atualizado" },
+          "404": { "description": "Não encontrado" }
+        }
+      },
+      "delete": {
+        "tags": ["Categorias"],
+        "summary": "Excluir categoria",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Excluído" },
+          "404": { "description": "Não encontrado" }
+        }
+      }
+    },
+    "/produtos": {
+      "get": {
+        "tags": ["Produtos"],
+        "summary": "Listar produtos",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": { "type": "integer", "default": 20 }
+          },
+          {
+            "in": "query",
+            "name": "categoria_id",
+            "schema": { "type": "string" }
+          },
+          { "in": "query", "name": "q", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "Lista paginada" } }
+      },
+      "post": {
+        "tags": ["Produtos"],
+        "summary": "Criar produto",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Produto" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Criado" },
+          "400": {
+            "description": "Campos obrigatórios ausentes ou categoria inválida"
+          }
+        }
+      }
+    },
+    "/produtos/{id}": {
+      "get": {
+        "tags": ["Produtos"],
+        "summary": "Obter produto",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Não encontrado" }
+        }
+      },
+      "put": {
+        "tags": ["Produtos"],
+        "summary": "Atualizar produto",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Produto" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Atualizado" },
+          "404": { "description": "Não encontrado" }
+        }
+      },
+      "delete": {
+        "tags": ["Produtos"],
+        "summary": "Excluir produto",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Excluído" },
+          "404": { "description": "Não encontrado" }
+        }
+      }
+    },
+    "/precos": {
+      "get": {
+        "tags": ["Preços"],
+        "summary": "Listar preços",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": { "type": "integer", "default": 20 }
+          },
+          {
+            "in": "query",
+            "name": "produto_id",
+            "schema": { "type": "string" }
+          },
+          {
+            "in": "query",
+            "name": "estabelecimento_id",
+            "schema": { "type": "string" }
+          },
+          {
+            "in": "query",
+            "name": "usuario_id",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "Lista paginada" } }
+      },
+      "post": {
+        "tags": ["Preços"],
+        "summary": "Criar preço",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Preco" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Criado" },
+          "400": {
+            "description": "Campos obrigatórios ausentes ou IDs inválidos"
+          }
+        }
+      }
+    },
+    "/estabelecimentos": {
+      "get": {
+        "tags": ["Estabelecimentos"],
+        "summary": "Listar estabelecimentos",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": { "type": "integer", "default": 20 }
+          },
+          { "in": "query", "name": "cidade", "schema": { "type": "string" } },
+          { "in": "query", "name": "estado", "schema": { "type": "string" } },
+          { "in": "query", "name": "nome", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "Lista paginada" } }
+      },
+      "post": {
+        "tags": ["Estabelecimentos"],
+        "summary": "Criar estabelecimento",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Estabelecimento" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Criado" },
+          "400": { "description": "Campos obrigatórios ausentes" }
+        }
+      }
+    },
+    "/estabelecimentos/{id}": {
+      "get": {
+        "tags": ["Estabelecimentos"],
+        "summary": "Obter estabelecimento",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Não encontrado" }
+        }
+      },
+      "put": {
+        "tags": ["Estabelecimentos"],
+        "summary": "Atualizar estabelecimento",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Estabelecimento" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Atualizado" },
+          "404": { "description": "Não encontrado" }
+        }
+      },
+      "delete": {
+        "tags": ["Estabelecimentos"],
+        "summary": "Excluir estabelecimento",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Excluído" },
+          "404": { "description": "Não encontrado" }
+        }
+      }
+    },
+    "/listas_compras": {
+      "get": {
+        "tags": ["Listas de Compras"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Listar listas",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": { "type": "integer", "default": 20 }
+          },
+          {
+            "in": "query",
+            "name": "usuario_id",
+            "schema": { "type": "string" }
+          },
+          { "in": "query", "name": "ativa", "schema": { "type": "boolean" } }
+        ],
+        "responses": { "200": { "description": "Lista paginada" } }
+      },
+      "post": {
+        "tags": ["Listas de Compras"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Criar lista",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ListaCompras" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Criado" },
+          "400": {
+            "description": "Campos obrigatórios ausentes ou usuario_id inválido"
+          }
+        }
+      }
+    },
+    "/listas_compras/{id}": {
+      "get": {
+        "tags": ["Listas de Compras"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Obter lista",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Não encontrado" }
+        }
+      },
+      "put": {
+        "tags": ["Listas de Compras"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Atualizar lista",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ListaCompras" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Atualizado" },
+          "404": { "description": "Não encontrado" }
+        }
+      },
+      "delete": {
+        "tags": ["Listas de Compras"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Excluir lista",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Excluído" },
+          "404": { "description": "Não encontrado" }
+        }
+      }
+    },
+    "/itens_lista": {
+      "get": {
+        "tags": ["Itens da Lista"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Listar itens",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": { "type": "integer", "default": 20 }
+          },
+          {
+            "in": "query",
+            "name": "lista_compras_id",
+            "schema": { "type": "string" }
+          },
+          {
+            "in": "query",
+            "name": "produto_id",
+            "schema": { "type": "string" }
+          },
+          { "in": "query", "name": "comprado", "schema": { "type": "boolean" } }
+        ],
+        "responses": { "200": { "description": "Lista paginada" } }
+      },
+      "post": {
+        "tags": ["Itens da Lista"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Criar item",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ItemLista" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Criado" },
+          "400": {
+            "description": "Campos obrigatórios ausentes ou IDs inválidos"
+          }
+        }
+      }
+    },
+    "/itens_lista/{id}": {
+      "get": {
+        "tags": ["Itens da Lista"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Obter item",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Não encontrado" }
+        }
+      },
+      "put": {
+        "tags": ["Itens da Lista"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Atualizar item",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ItemLista" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Atualizado" },
+          "404": { "description": "Não encontrado" }
+        }
+      },
+      "delete": {
+        "tags": ["Itens da Lista"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Excluir item",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Excluído" },
+          "404": { "description": "Não encontrado" }
+        }
+      }
+    },
+    "/favoritos": {
+      "get": {
+        "tags": ["Favoritos"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Listar favoritos",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": { "type": "integer", "default": 20 }
+          },
+          {
+            "in": "query",
+            "name": "usuario_id",
+            "schema": { "type": "string" }
+          },
+          {
+            "in": "query",
+            "name": "tipo",
+            "schema": {
+              "type": "string",
+              "enum": ["produto", "estabelecimento"]
+            }
+          }
+        ],
+        "responses": { "200": { "description": "Lista paginada" } }
+      },
+      "post": {
+        "tags": ["Favoritos"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Criar favorito",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Favorito" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Criado" },
+          "409": { "description": "Duplicado" },
+          "400": {
+            "description": "Campos obrigatórios ausentes ou IDs inválidos"
+          }
+        }
+      }
+    },
+    "/favoritos/{id}": {
+      "delete": {
+        "tags": ["Favoritos"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Excluir favorito",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Excluído" },
+          "404": { "description": "Não encontrado" }
+        }
+      }
+    },
+    "/historico_buscas": {
+      "get": {
+        "tags": ["Histórico de Buscas"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Listar histórico",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": { "type": "integer", "default": 20 }
+          },
+          {
+            "in": "query",
+            "name": "usuario_id",
+            "schema": { "type": "string" }
+          },
+          {
+            "in": "query",
+            "name": "tipo_busca",
+            "schema": { "type": "string", "enum": ["produto", "codigo_barras"] }
+          }
+        ],
+        "responses": { "200": { "description": "Lista paginada" } }
+      },
+      "post": {
+        "tags": ["Histórico de Buscas"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Criar registro",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/HistoricoBusca" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Criado" },
+          "400": {
+            "description": "Campos obrigatórios ausentes ou usuario_id inválido"
+          }
+        }
+      }
+    },
+    "/historico_buscas/{id}": {
+      "delete": {
+        "tags": ["Histórico de Buscas"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Excluir registro",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Excluído" },
+          "404": { "description": "Não encontrado" }
+        }
+      }
+    },
+    "/usuarios": {
+      "get": {
+        "tags": ["Usuários"],
+        "summary": "Listar usuários",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": { "type": "integer", "default": 20 }
+          }
+        ],
+        "responses": { "200": { "description": "Lista paginada" } }
+      },
+      "post": {
+        "tags": ["Usuários"],
+        "summary": "Cadastrar usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Usuario" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Criado" },
+          "400": { "description": "Campos obrigatórios ausentes" }
+        }
+      }
+    },
+    "/usuarios/{id}": {
+      "get": {
+        "tags": ["Usuários"],
+        "summary": "Obter usuário",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Não encontrado" }
+        }
+      },
+      "put": {
+        "tags": ["Usuários"],
+        "summary": "Atualizar usuário",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Usuario" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Atualizado" },
+          "404": { "description": "Não encontrado" }
+        }
+      },
+      "delete": {
+        "tags": ["Usuários"],
+        "summary": "Excluir usuário",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Excluído" },
+          "404": { "description": "Não encontrado" }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["Autenticação"],
+        "summary": "Login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TokenResponse" }
+              }
+            }
+          },
+          "400": { "description": "Requisição inválida" },
+          "401": { "description": "Credenciais inválidas" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Categoria": {
+        "type": "object",
+        "properties": {
+          "categoria_id": { "type": "string" },
+          "nome": { "type": "string" },
+          "descricao": { "type": "string" },
+          "icone": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["categoria_id", "nome"]
+      },
+      "Produto": {
+        "type": "object",
+        "properties": {
+          "produto_id": { "type": "string" },
+          "nome": { "type": "string" },
+          "nome_normalizado": { "type": "string" },
+          "unidade": { "type": "string" },
+          "categoria_id": { "type": "string" },
+          "descricao": { "type": "string" },
+          "imagem_url": { "type": "string" },
+          "ean": { "type": "string" },
+          "ativo": { "type": "boolean" }
+        },
+        "required": ["produto_id", "nome", "nome_normalizado", "unidade"]
+      },
+      "Preco": {
+        "type": "object",
+        "properties": {
+          "preco_id": { "type": "string" },
+          "produto_id": { "type": "string" },
+          "estabelecimento_id": { "type": "string" },
+          "usuario_id": { "type": "string" },
+          "preco": { "type": "number" },
+          "data_coleta": { "type": "string", "format": "date-time" },
+          "latitude": { "type": "number" },
+          "longitude": { "type": "number" },
+          "validado": { "type": "boolean" }
+        },
+        "required": [
+          "preco_id",
+          "produto_id",
+          "estabelecimento_id",
+          "usuario_id",
+          "preco"
+        ]
+      },
+      "Estabelecimento": {
+        "type": "object",
+        "properties": {
+          "estabelecimento_id": { "type": "string" },
+          "nome": { "type": "string" },
+          "logradouro": { "type": "string" },
+          "bairro": { "type": "string" },
+          "cidade": { "type": "string" },
+          "estado": { "type": "string" }
+        },
+        "required": [
+          "estabelecimento_id",
+          "nome",
+          "logradouro",
+          "bairro",
+          "cidade",
+          "estado"
+        ]
+      },
+      "ListaCompras": {
+        "type": "object",
+        "properties": {
+          "lista_compras_id": { "type": "string" },
+          "usuario_id": { "type": "string" },
+          "nome": { "type": "string" },
+          "orcamento_total": { "type": "number" },
+          "ativa": { "type": "boolean" }
+        },
+        "required": ["lista_compras_id", "usuario_id", "nome"]
+      },
+      "ItemLista": {
+        "type": "object",
+        "properties": {
+          "item_lista_id": { "type": "string" },
+          "lista_compras_id": { "type": "string" },
+          "produto_id": { "type": "string" },
+          "quantidade": { "type": "number" },
+          "unidade": { "type": "string" },
+          "preco_estimado": { "type": "number" },
+          "comprado": { "type": "boolean" },
+          "ordem": { "type": "integer" }
+        },
+        "required": [
+          "item_lista_id",
+          "lista_compras_id",
+          "produto_id",
+          "quantidade",
+          "unidade"
+        ]
+      },
+      "Favorito": {
+        "type": "object",
+        "properties": {
+          "favoritos_id": { "type": "string" },
+          "usuario_id": { "type": "string" },
+          "tipo": { "type": "string", "enum": ["produto", "estabelecimento"] },
+          "produto_id": { "type": "string" },
+          "estabelecimento_id": { "type": "string" }
+        },
+        "required": ["favoritos_id", "usuario_id", "tipo"]
+      },
+      "HistoricoBusca": {
+        "type": "object",
+        "properties": {
+          "historico_buscas_id": { "type": "string" },
+          "usuario_id": { "type": "string" },
+          "termo_busca": { "type": "string" },
+          "tipo_busca": {
+            "type": "string",
+            "enum": ["produto", "codigo_barras"]
+          }
+        },
+        "required": [
+          "historico_buscas_id",
+          "usuario_id",
+          "termo_busca",
+          "tipo_busca"
+        ]
+      },
+      "Usuario": {
+        "type": "object",
+        "properties": {
+          "usuario_id": { "type": "string" },
+          "nome": { "type": "string" },
+          "email": { "type": "string" },
+          "senha": { "type": "string" }
+        },
+        "required": ["usuario_id", "nome", "email", "senha"]
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string" },
+          "senha": { "type": "string" }
+        },
+        "required": ["email", "senha"]
+      },
+      "TokenResponse": {
+        "type": "object",
+        "properties": {
+          "token": { "type": "string" }
+        },
+        "required": ["token"]
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

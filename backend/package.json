@@ -1,0 +1,32 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Aplicativo de criação de lista de preços",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "seed": "node src/test/runSeeders.js",
+    "seed:reset": "node src/test/resetSeed.js",
+    "seed:rebuild": "npm run seed:reset && npm run seed",
+    "docs:build": "npx widdershins src/docs/openapi.json -o ../docs/API.md",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jorge Luiz dos Santos, Michel Miranda de Jesus",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "hash": "^0.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.15.3",
+    "nodemon": "^3.1.11",
+    "sequelize": "^6.37.7",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "widdershins": "^4.0.1"
+  }
+}
